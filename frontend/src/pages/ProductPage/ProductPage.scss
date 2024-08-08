@@ -1,0 +1,165 @@
+.product-page {
+  padding: 20px;
+  .breadcrumb {
+    margin-bottom: 10px;
+    a {
+      text-decoration: none;
+      color: #000;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .product-details {
+    display: flex;
+    .product-images {
+      .main-image {
+        width: 300px;
+        height: 300px;
+      }
+      .thumbnail-images {
+        display: flex;
+        img {
+          width: 60px;
+          height: 60px;
+          margin: 5px;
+        }
+      }
+    }
+    .product-info {
+      margin-left: 20px;
+      h1 {
+        font-size: 24px;
+      }
+      .reviews {
+        margin: 10px 0;
+        span {
+          color: #f39c12;
+        }
+      }
+      .price {
+        .original-price {
+          text-decoration: line-through;
+          color: #777;
+        }
+        .discounted-price {
+          color: #e74c3c;
+          font-size: 20px;
+        }
+        .discount {
+          color: #e74c3c;
+        }
+      }
+      .color-options {
+        margin: 10px 0;
+        .color-option {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          margin: 0 5px;
+          &.pink {
+            background: pink;
+          }
+          &.green {
+            background: green;
+          }
+          &.blue {
+            background: blue;
+          }
+        }
+      }
+      /* From Uiverse.io by dldrs */
+      .add-to-cart {
+        position: relative;
+        overflow: hidden;
+        outline: none;
+        cursor: pointer;
+        border-radius: 0;
+        border: none;
+        background-color: transparent;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+          rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        font-family: "Inter", sans-serif;
+        padding: 0; // Remove any default padding
+
+        .default-btn {
+          background-image: linear-gradient(
+            90.1deg,
+            rgba(84, 212, 228, 1) 0.2%,
+            rgba(68, 36, 164, 1) 99.9%
+          );
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          padding: 1em 3em;
+          border-radius: 0;
+          font-size: 14px;
+          font-weight: 500;
+          text-transform: uppercase;
+          transition: transform 0.3s ease;
+          z-index: 1; // Ensure it stays on top when not hovered
+        }
+
+        .hover-btn {
+          position: absolute;
+          top: 100%; // Move it out of view vertically
+          left: 0;
+          right: 0;
+          font-size: 16px;
+          padding: 1em 3em;
+          text-align: center;
+          background: linear-gradient(
+            63deg,
+            rgba(26, 35, 126, 1) 0%,
+            rgba(69, 39, 160, 1) 100%
+          );
+          box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+            rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+          transition: transform 0.3s ease, top 0.3s ease; // Transition for smooth hover
+          z-index: 0; // Behind the default button
+        }
+
+        .default-btn span,
+        .hover-btn span {
+          color: hsl(0, 0%, 100%);
+        }
+
+        &:hover .default-btn {
+          transform: translateY(-100%);
+        }
+
+        &:hover .hover-btn {
+          top: 0; // Bring it into view
+          transform: translateY(0);
+        }
+      }
+
+      .additional-info {
+        margin-top: 10px;
+        span {
+          display: block;
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+  .product-tabs {
+    display: flex;
+    margin: 20px 0;
+    button {
+      background: none;
+      border: none;
+      font-size: 16px;
+      margin-right: 20px;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .product-description {
+    h2 {
+      margin-bottom: 10px;
+    }
+  }
+}

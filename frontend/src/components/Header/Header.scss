@@ -1,0 +1,131 @@
+header {
+  // background-color: #5d4037;
+  background-image: url(../../assets/background.jpg);
+  color: #fff6f1;
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  gap: 40%;
+  align-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 1% 0px;
+
+  img {
+    justify-self: flex-start;
+    flex-basis: 15%;
+    margin-left: 5%;
+  }
+  nav {
+    display: flex;
+    width: 100%;
+    justify-self: flex-end;
+    align-items: center;
+    flex-basis: 35%;
+    margin-right: 5%;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      margin: 5%;
+    }
+
+    .cart-icon {
+      width: 24px;
+      height: 24px;
+      fill: #fff6f1;
+    }
+    /* From Uiverse.io by Subaashbala */
+    button {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 5% 0 5% 5%;
+      // background-color: #e56d4b;
+      background-image: url(../../assets/btn--background-1.jpg);
+      cursor: pointer;
+      box-shadow: 4px 6px 0px #fff6f1;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+      z-index: 100;
+      transition: box-shadow 250ms, transform 250ms, filter 50ms;
+    }
+    button:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 3px 0px #e56d4b;
+    }
+    button:active {
+      filter: saturate(0.75);
+    }
+    button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: #fff6f1;
+      z-index: -1;
+      transform: translateX(-100%);
+      transition: transform 250ms;
+    }
+    button:hover::after {
+      transform: translateX(0);
+    }
+    .bgContainer {
+      position: relative;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      overflow: hidden;
+      max-width: 38%;
+      font-size: 14sp;
+      font-weight: 600;
+    }
+    .bgContainer span {
+      position: relative;
+      transform: translateX(-100%);
+      transition: all 250ms;
+    }
+    .button:hover .bgContainer > span {
+      transform: translateX(0);
+    }
+    .arrowContainer {
+      padding: 1%;
+      margin-inline-end: 1%;
+      border-radius: 50%;
+      background-color: #fff6f1;
+      position: relative;
+      overflow: hidden;
+      transition: transform 250ms, background-color 250ms;
+      z-index: 100;
+    }
+    .arrowContainer::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      // background-color: #e56d4b;
+      background-image: url(../../assets/btn--background-1.jpg);
+      transform: translateX(-100%);
+      z-index: -1;
+      transition: transform 250ms ease-in-out;
+    }
+    button:hover .arrowContainer::after {
+      transform: translateX(0);
+    }
+    button:hover .arrowContainer {
+      transform: translateX(5px);
+    }
+    button:active .arrowContainer {
+      transform: translateX(8px);
+    }
+    .arrowContainer svg {
+      vertical-align: middle;
+    }
+  }
+}
+.HeaderHome {
+  background: transparent;
+}

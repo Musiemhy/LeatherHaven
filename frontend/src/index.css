@@ -1,0 +1,24 @@
+:root {
+  --primary-color: #5d4037;
+  --secondary-color: #e56d4b;
+  --accent-color: #fff6f1;
+  --background-color: white;
+  --text-color: #582b39;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 5%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+main {
+  padding-top: 80px;
+  margin: 2%;
+}

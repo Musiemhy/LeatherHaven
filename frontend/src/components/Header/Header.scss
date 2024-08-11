@@ -47,7 +47,7 @@ header {
       // background-color: #e56d4b;
       background-image: url(../../assets/btn--background-1.jpg);
       cursor: pointer;
-      box-shadow: 4px 6px 0px #fff6f1;
+      box-shadow: 4px 6px 0px #e56d4b;
       border-radius: 15px;
       position: relative;
       overflow: hidden;
@@ -65,7 +65,7 @@ header {
       content: "";
       position: absolute;
       inset: 0;
-      background-color: #fff6f1;
+      background-color: #e56d4b;
       z-index: -1;
       transform: translateX(-100%);
       transition: transform 250ms;
@@ -84,18 +84,20 @@ header {
       font-weight: 600;
     }
     .bgContainer span {
+      color: #fff6f1;
       position: relative;
       transform: translateX(-100%);
       transition: all 250ms;
     }
     .button:hover .bgContainer > span {
+      color: #fff6f1;
       transform: translateX(0);
     }
     .arrowContainer {
       padding: 1%;
       margin-inline-end: 1%;
       border-radius: 50%;
-      background-color: #fff6f1;
+      background-color: #e56d4b;
       position: relative;
       overflow: hidden;
       transition: transform 250ms, background-color 250ms;

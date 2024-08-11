@@ -2,9 +2,12 @@ import express, { request, response } from "express";
 import { PORT, MongoDBURL } from "./config.js";
 import { Product } from "./models/productModel.js";
 import mongoose from "mongoose";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
+// app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
 app.get(`/`, (request, response) => {
@@ -13,7 +16,7 @@ app.get(`/`, (request, response) => {
 });
 
 //route to add proucts
-app.post(`/products`, async (request, response) => {
+app.post(`/addproducts`, async (request, response) => {
   try {
     if (
       !request.body.name ||
@@ -52,7 +55,7 @@ app.post(`/products`, async (request, response) => {
 });
 
 //route to get all proucts
-app.get(`/Products`, async (request, response) => {
+app.get(`/getproducts`, async (request, response) => {
   try {
     const products = await Product.find({});
     return response.status(200).json(products);

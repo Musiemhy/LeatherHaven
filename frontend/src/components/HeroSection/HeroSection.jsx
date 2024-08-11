@@ -1,10 +1,10 @@
 import React from "react";
-import Header from "../Header/Header";
+import Header from "../../components/Header/Header";
 import "./HeroSection.scss";
 
 const HeroSection = () => {
   return (
-    <div className="HeroSection">
+    <div className="Herosection">
       <Header />
       <div className="HeroItems">
         <h1>Welcome to LeatherHaven</h1>

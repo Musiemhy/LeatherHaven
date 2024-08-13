@@ -23,19 +23,27 @@ const Product = () => {
   }, []);
 
   return (
-    <div className="productItem">
-      {products.map((product) => (
-        <div key={product._id} className="product">
-          <img src={product.images[0]} alt={product.name} />
-          <p className="rating">Rating: {product.rating}</p>
-          <p className="name">{product.name}</p>
-          <p className="description">{product.description}</p>
-          <p className="price">ETB {product.price}</p>
-          <p className="discount">
-            Discount: {product.discount ? product.discount : "No discount"}
-          </p>
-        </div>
-      ))}
+    <div className="productSection">
+      <div className="header">
+        <p>New Products</p>
+        <button>Shop Now</button>
+      </div>
+      <div className="productItem">
+        {products.map((product) => (
+          <div key={product._id} className="product">
+            <img src={product.images[0]} alt={product.name} />
+            <p className="rating">Rating: {product.rating}</p>
+            <p className="name">{product.name}</p>
+            <p className="description">{product.description}</p>
+            <div className="truePrice">
+              <p className="price">{product.price} ETB</p>
+              <p className="discount">
+                {product.discount ? product.discount : "No discount"} ETB
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

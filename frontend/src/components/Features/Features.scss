@@ -1,0 +1,19 @@
+.features {
+  margin: 10% 18%;
+
+  .features-item {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    text-align: justify;
+
+    .item1,
+    .item2,
+    .item3 {
+      display: flex;
+      flex-direction: row;
+      gap: 1%;
+      align-items: stretch;
+    }
+  }
+}

@@ -130,4 +130,14 @@ header {
 }
 .HeaderHome {
   background: transparent;
+  position: absolute;
+
+  a {
+    color: #582b39;
+  }
+  .cart-icon {
+    width: 24px;
+    height: 24px;
+    fill: #582b39;
+  }
 }

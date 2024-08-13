@@ -1,0 +1,31 @@
+.Story {
+  margin: 10% 18%;
+
+  .Story-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10%;
+
+    img {
+      justify-self: center;
+      align-self: center;
+      height: 100%;
+      width: 45%;
+    }
+    .paragraph {
+      flex-basis: 45%;
+      font-size: small;
+
+      p {
+        text-align: justify;
+      }
+
+      Button {
+        padding: 2% 5%;
+        background-image: url(../../assets/btn--background-1.jpg);
+        color: #fff6f1;
+        cursor: pointer;
+      }
+    }
+  }
+}

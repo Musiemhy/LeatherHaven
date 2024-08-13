@@ -17,7 +17,6 @@ const ProductPage = () => {
               className="main-image"
             />
             <div className="thumbnail-images">
-              {/* Add multiple thumbnails */}
               <img src="thumbnail-url" alt="Product thumbnail" />
               <img src="thumbnail-url" alt="Product thumbnail" />
               <img src="thumbnail-url" alt="Product thumbnail" />

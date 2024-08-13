@@ -1,0 +1,23 @@
+.Testimonials {
+  margin: 10% 10%;
+
+  h3 {
+    text-align: center;
+  }
+
+  .Testimonials-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10%;
+
+    .testimonial1,
+    .testimonial2,
+    .testimonial3 {
+      text-align: justify;
+
+      h1 {
+        text-align: center;
+      }
+    }
+  }
+}

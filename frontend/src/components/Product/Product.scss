@@ -1,82 +1,55 @@
-.productSection {
-  margin: 10% 18%;
+.productItem {
+  display: grid;
+  grid-template-columns: 32% 32% 32%;
+  grid-template-rows: auto auto auto;
+  gap: 2%;
 
-  .header {
+  .product {
     display: flex;
-    flex-direction: row;
-    margin-bottom: 5%;
-    align-items: stretch;
-    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: 10%;
+    cursor: pointer;
 
-    p {
-      justify-self: flex-start;
-      font-weight: bolder;
-      font-size: 24px;
-      margin: 0;
-      flex: 1;
+    img {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      background-color: #fff6f1;
+      width: 100%;
+      height: 100%;
+      margin-bottom: 10px;
     }
-    Button {
-      justify-self: flex-end;
-      padding: 0px 2%;
-      background-image: url(../../assets/btn--background-1.jpg);
-      color: #fff6f1;
-      cursor: pointer;
+
+    .truePrice {
+      display: flex;
+      flex-direction: row;
+      gap: 2%;
+    }
+
+    .price {
+      text-decoration: line-through;
+      margin: 0px;
+      padding: 0px;
+      font-weight: lighter;
+      color: #a79d9b;
+      font-size: smaller;
+    }
+
+    .name,
+    .discount,
+    .rating {
+      font-weight: bolder;
+      margin: 0px;
+      padding: 0px;
+      font-size: small;
+    }
+    .description {
+      font-weight: lighter;
+      color: #a79d9b;
+      margin: 10px 0px 5px 0px;
+      padding: 0px;
+      font-size: small;
     }
   }
-
-  .productItem {
-    display: grid;
-    grid-template-columns: 32% 32% 32%;
-    grid-template-rows: auto auto auto;
-    gap: 2%;
-
-    .product {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 10%;
-      cursor: pointer;
-
-      img {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-        background-color: #fff6f1;
-        width: 100%;
-        height: 100%;
-        margin-bottom: 10px;
-      }
-
-      .truePrice {
-        display: flex;
-        flex-direction: row;
-        gap: 2%;
-      }
-
-      .price {
-        text-decoration: line-through;
-        margin: 0px;
-        padding: 0px;
-        font-weight: lighter;
-        color: #a79d9b;
-        font-size: smaller;
-      }
-
-      .name,
-      .discount,
-      .rating {
-        font-weight: bolder;
-        margin: 0px;
-        padding: 0px;
-        font-size: small;
-      }
-      .description {
-        font-weight: lighter;
-        color: #a79d9b;
-        margin: 10px 0px 5px 0px;
-        padding: 0px;
-        font-size: small;
-      }
-    }
-    .product:hover {
-      transform: scale(1.05);
-    }
+  .product:hover {
+    transform: scale(1.05);
   }
 }

@@ -1,0 +1,26 @@
+.productSection {
+  margin: 10% 18%;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5%;
+    align-items: stretch;
+    justify-content: space-between;
+
+    p {
+      justify-self: flex-start;
+      font-weight: bolder;
+      font-size: 24px;
+      margin: 0;
+      flex: 1;
+    }
+    Button {
+      justify-self: flex-end;
+      padding: 0px 2%;
+      background-image: url(../../assets/btn--background-1.jpg);
+      color: #fff6f1;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Product.scss";
 
@@ -9,11 +10,12 @@ const Product = ({ category, gender }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log(category);
-        console.log(gender);
-        const response = await axios.get(`http://localhost:5555/getproducts`, {
-          params: { category, gender },
-        });
+        const response = await axios.get(
+          `http://localhost:5555/api/getproducts`,
+          {
+            params: { category, gender },
+          }
+        );
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else {
@@ -38,18 +40,21 @@ const Product = ({ category, gender }) => {
         <p>No products available</p>
       ) : (
         products.map((product) => (
-          <div key={product._id} className="product">
-            <img src={product.images[0]} alt={product.name} />
-            <p className="rating">Rating: {product.rating}</p>
-            <p className="name">{product.name}</p>
-            <p className="description">{product.description}</p>
-            <div className="truePrice">
-              <p className="price">{product.price} ETB</p>
-              <p className="discount">
-                {product.discount ? product.discount : "No discount"} ETB
-              </p>
+          <Link to={`/product/${product._id}`} key={product._id}>
+            {console.log(product._id)}
+            <div className="product">
+              <img src={product.images[0]} alt={product.name} />
+              <p className="rating">Rating: {product.rating}</p>
+              <p className="name">{product.name}</p>
+              <p className="description">{product.description}</p>
+              <div className="truePrice">
+                <p className="price">{product.price} ETB</p>
+                <p className="discount">
+                  {product.discount ? product.discount : "No discount"} ETB
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         ))
       )}
     </div>

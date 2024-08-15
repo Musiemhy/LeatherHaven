@@ -1,5 +1,5 @@
 .ProductListPage {
-  margin: 10% 18%;
+  margin: 10% 10%;
 
   .productList {
     display: flex;
@@ -35,28 +35,42 @@
       }
     }
 
-    .sort {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin: 5% 0px;
+    .allProduct {
+      width: 100%;
 
-      .gender {
-        input[type="radio"] {
-          appearance: none;
-        }
-        input[type="radio"]:checked + label {
-          color: #e56d4b;
-        }
-        label {
-          padding: 5px 10px;
-          cursor: pointer;
-        }
+      h1 {
+        margin-bottom: 0px;
       }
-      select {
-        padding: 1% 10% 1% 1%;
-        background-color: #fff6f1;
-        font-size: small;
+      p {
+        margin-top: 0px;
+      }
+      .sort {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 5%;
+
+        .gender {
+          display: flex;
+          flex-direction: row;
+          gap: 5%;
+
+          input[type="radio"] {
+            appearance: none;
+          }
+          input[type="radio"]:checked + label {
+            color: #e56d4b;
+          }
+          label {
+            padding: 5px 10px;
+            cursor: pointer;
+          }
+        }
+        select {
+          padding: 1% 10% 1% 1%;
+          background-color: #fff6f1;
+          font-size: small;
+        }
       }
     }
   }

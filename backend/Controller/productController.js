@@ -74,3 +74,20 @@ export const getProductsByCategoryAndGender = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+export const getProductsById = async (req, res) => {
+  try {
+    const { productId } = req.query;
+
+    const query = {};
+
+    query.productId = productId;
+
+    const products = await Product.find(query);
+
+    return res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: error.message });
+  }
+};

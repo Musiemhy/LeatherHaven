@@ -9,11 +9,11 @@ const ProductListPage = () => {
 
   const handleChange = (event) => {
     const { value, type } = event.target;
-    if (type === "radio") {
-      setSelectedGender(value);
-    } else if (type === "radio") {
-      setSelectedCategory(value);
-    }
+    setSelectedGender(value);
+  };
+  const handleChange1 = (event) => {
+    const { value, type } = event.target;
+    setSelectedCategory(value);
   };
 
   return (
@@ -30,7 +30,7 @@ const ProductListPage = () => {
                     id={category}
                     value={category}
                     checked={selectedCategory === category}
-                    onChange={handleChange}
+                    onChange={handleChange1}
                   />
                   <label htmlFor={category}>{category}</label>
                 </li>

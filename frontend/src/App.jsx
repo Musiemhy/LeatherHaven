@@ -17,7 +17,7 @@ const App = () => {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/product" element={<ProductPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/ProductList" element={<ProductListPage />} />
           </Routes>
         </main>
@@ -25,7 +25,7 @@ const App = () => {
       {isHomePage && (
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/product" element={<ProductPage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/ProductList" element={<ProductListPage />} />
         </Routes>
       )}

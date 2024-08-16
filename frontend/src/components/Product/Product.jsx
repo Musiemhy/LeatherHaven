@@ -41,7 +41,7 @@ const Product = ({ category, gender }) => {
       ) : (
         products.map((product) => (
           <Link to={`/product/${product._id}`} key={product._id}>
-            {console.log(product._id)}
+            {console.log("Link URL:", `/product/${product._id}`)}
             <div className="product">
               <img src={product.images[0]} alt={product.name} />
               <p className="rating">Rating: {product.rating}</p>

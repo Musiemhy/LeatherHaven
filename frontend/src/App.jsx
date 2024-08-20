@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import HomePage from "./pages/HomePage/HomePage";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import ProductListPage from "./pages/ProductListPage/ProductListPage";
+import CartPage from "./pages/CartPage/CartPage";
 
 const App = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/product/:productId" element={<ProductPage />} />
             <Route path="/ProductList" element={<ProductListPage />} />
+            <Route path="/cartPage/:productId" element={<CartPage />} />
           </Routes>
         </main>
       )}
@@ -27,6 +29,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/ProductList" element={<ProductListPage />} />
+          <Route path="/cartPage/:productId" element={<CartPage />} />
         </Routes>
       )}
       <Footer />

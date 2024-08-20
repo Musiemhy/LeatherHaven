@@ -79,15 +79,11 @@ export const getProductsById = async (req, res) => {
   try {
     const { productId } = req.query;
 
-    console.log("Received Product ID:", productId); // Check if productId is received
-
     if (!productId) {
       return res.status(400).send({ message: "Product ID is required" });
     }
 
     const product = await Product.findById(productId);
-
-    console.log("Queried Product from DB:", product); // Check the product queried from the DB
 
     if (!product) {
       return res.status(404).send({ message: "Product not found" });

@@ -1,0 +1,17 @@
+.registerPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .data {
+    form {
+      display: flex;
+      flex-direction: column;
+
+      input {
+        padding: 2% 10%;
+        margin: 2%;
+      }
+    }
+  }
+}

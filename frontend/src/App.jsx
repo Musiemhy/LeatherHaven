@@ -6,6 +6,8 @@ import HomePage from "./pages/HomePage/HomePage";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import ProductListPage from "./pages/ProductListPage/ProductListPage";
 import CartPage from "./pages/CartPage/CartPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
 
 const App = () => {
   const location = useLocation();
@@ -18,6 +20,8 @@ const App = () => {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/product/:productId" element={<ProductPage />} />
             <Route path="/ProductList" element={<ProductListPage />} />
             <Route path="/cartPage/:productId" element={<CartPage />} />
@@ -27,6 +31,8 @@ const App = () => {
       {isHomePage && (
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/ProductList" element={<ProductListPage />} />
           <Route path="/cartPage/:productId" element={<CartPage />} />

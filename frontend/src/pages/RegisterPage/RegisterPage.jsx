@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./RegisterPage.scss";
 
@@ -11,6 +12,7 @@ const RegisterPage = () => {
     password: "",
     confirm_password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -30,6 +32,7 @@ const RegisterPage = () => {
       );
       if (response.data.message === "registered") {
         alert("Successfully registered. Being redirected to login page.");
+        navigate("/login");
       } else {
         setError(response.data.message);
       }
@@ -41,7 +44,17 @@ const RegisterPage = () => {
 
   return (
     <div className="registerPage">
+      <div className="image"></div>
       <div className="data">
+        <div className="links">
+          <Link to="/login">
+            <button> Login </button>
+          </Link>
+          <Link to="/">
+            <button> Home </button>
+          </Link>
+        </div>
+        <h1> Register Page </h1>
         <form onSubmit={formSubmission}>
           <div className="name">
             <label htmlFor="name"> Name: </label>
@@ -96,6 +109,9 @@ const RegisterPage = () => {
           <span className="error"> {error} </span>
           <button type="submit"> Register </button>
         </form>
+        <Link to="/login">
+          <span> Already have an account? Go To Login </span>
+        </Link>
       </div>
     </div>
   );

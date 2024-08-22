@@ -72,15 +72,15 @@ export const getUserByNameAndPassword = async (req, res) => {
   }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserByName = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { name } = req.query;
 
-    if (!userId) {
-      return res.status(400).send({ message: "User ID is required" });
+    if (!name) {
+      return res.status(400).send({ message: "Name is required" });
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(name);
 
     if (!user) {
       return res.status(404).send({ message: "User not found" });

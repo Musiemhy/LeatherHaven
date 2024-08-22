@@ -1,10 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./CartPage.scss";
 import CartItem from "../../components/CartItem/CartItem";
 
 const CartPage = () => {
   const { productId } = useParams();
+  const [inputs, setInputs] = useState({
+    user: "",
+  });
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({
+      ...values,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const addToCart = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5555/api/addcart",
+          inputs
+        );
+      } catch (error) {
+        console.log("The error is: ", error);
+      }
+    };
+  }, []);
 
   return (
     <div className="cartPage">

@@ -11,10 +11,10 @@ export const addCart = async (request, response) => {
     }
 
     for (const item of items) {
-      if (!item.product || !item.quantity) {
-        return response
-          .status(400)
-          .send({ message: "Each item must have a product and quantity" });
+      if (!item.product || !item.quantity || !item.size) {
+        return response.status(400).send({
+          message: "Each item must have a product, size and quantity",
+        });
       }
     }
 

@@ -12,33 +12,32 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 const App = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const isRegisterPage = location.pathname === "/register";
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <div>
-      {!isHomePage && <Header />}
-      {!isHomePage && (
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/product/:productId" element={<ProductPage />} />
-            <Route path="/ProductList" element={<ProductListPage />} />
-            <Route path="/cartPage/:productId" element={<CartPage />} />
-          </Routes>
-        </main>
-      )}
-      {isHomePage && (
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/product/:productId" element={<ProductPage />} />
-          <Route path="/ProductList" element={<ProductListPage />} />
-          <Route path="/cartPage/:productId" element={<CartPage />} />
-        </Routes>
-      )}
-      <Footer />
+      {!isHomePage && !isRegisterPage && !isLoginPage && <Header />}
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/*"
+          element={
+            <main>
+              <Routes>
+                <Route path="/product/:productId" element={<ProductPage />} />
+                <Route path="/ProductList" element={<ProductListPage />} />
+                <Route path="/cartPage/:productId" element={<CartPage />} />
+              </Routes>
+            </main>
+          }
+        />
+      </Routes>
+
+      {!isHomePage && !isRegisterPage && !isLoginPage && <Footer />}
     </div>
   );
 };

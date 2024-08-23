@@ -10,7 +10,6 @@ const QuantitySelector = ({
 }) => {
   const [quantity, setQuantity] = useState(initialValue);
 
-  // Update internal state when initialValue prop changes
   useEffect(() => {
     setQuantity(initialValue);
   }, [initialValue]);

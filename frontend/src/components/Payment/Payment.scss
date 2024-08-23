@@ -1,0 +1,53 @@
+.payment {
+  display: flex;
+  flex-direction: column;
+
+  form {
+    background-color: #fff6f1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    padding: 50px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto auto auto;
+    gap: 5%;
+
+    .items {
+      display: flex;
+      flex-direction: column;
+      gap: 5%;
+
+      label {
+        font-weight: 900;
+      }
+      input {
+        text-align: center;
+        padding: 10px 40px;
+      }
+    }
+
+    #item1 {
+      grid-area: 1/1/2/2;
+    }
+    #item2 {
+      grid-area: 1/2/2/-1;
+    }
+    #item3 {
+      grid-area: 2/1/3/-1;
+    }
+    #item4 {
+      grid-area: 3/1/4/-1;
+    }
+    #item5 {
+      grid-area: 4/1/-1/-1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        padding: 10px 20px;
+        background-image: url(../../assets/btn--background-1.jpg);
+        color: #fff6f1;
+      }
+    }
+  }
+}

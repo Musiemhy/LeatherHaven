@@ -1,19 +1,19 @@
 import { Cart } from "../models/cartModel.js";
 
-export const addCart = async (request, response) => {
+export const addCart = async (req, res) => {
   try {
-    const { user, items } = request.body;
+    const { user, items } = req.body;
 
     if (!user || !Array.isArray(items) || items.length === 0) {
-      return response
+      return res
         .status(400)
         .send({ message: "Please send all required fields" });
     }
 
     for (const item of items) {
       if (!item.product || !item.quantity || !item.size) {
-        return response.status(400).send({
-          message: "Each item must have a product, size and quantity",
+        return res.status(400).send({
+          message: "Each item must have a product, size, and quantity",
         });
       }
     }
@@ -25,10 +25,10 @@ export const addCart = async (request, response) => {
 
     const cart = await Cart.create(newCart);
 
-    return response.status(201).send(cart);
+    return res.status(201).send(cart);
   } catch (error) {
-    console.log(error);
-    response.status(500).send({ message: error.message });
+    console.error(error);
+    res.status(500).send({ message: error.message });
   }
 };
 

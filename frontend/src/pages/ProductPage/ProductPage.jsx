@@ -31,22 +31,24 @@ const ProductPage = () => {
 
     try {
       const cartData = {
-        user_id,
+        user: user_id,
         items: [
           {
-            productId: product._id,
+            product: product._id,
             size: selectedOption,
             quantity,
           },
         ],
       };
 
+      console.log("Sending Cart Data:", cartData);
+
       const response = await axios.post(
         "http://localhost:5555/api/addcart",
         cartData
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("Product added to cart successfully");
         navigate(`/cartPage/${productId}`);
       }

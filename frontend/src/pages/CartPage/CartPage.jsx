@@ -1,79 +1,82 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./CartPage.scss";
 import CartItem from "../../components/CartItem/CartItem";
+import axios from "axios";
 
 const CartPage = () => {
-  const { productId } = useParams();
-  const [inputs, setInputs] = useState({
-    user: "",
-  });
+  const [cartIds, setCartIds] = useState([]);
+  const [cartItem, setCartItem] = useState([]);
+  const userId = localStorage.getItem("user_id");
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values) => ({
-      ...values,
-      [name]: value,
-    }));
-  };
+  let productId = [];
 
   useEffect(() => {
-    const addToCart = async () => {
+    const fetchCarts = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:5555/api/addcart",
-          inputs
-        );
+        const response = await axios.get("http://localhost:5555/api/getcart", {
+          params: { userId },
+        });
+        if (response.data && response.data._id) {
+          // Check for object
+          setCartItem(response.data);
+          onCartNumberChange([response.data._id]); // Wrap in array
+        } else {
+          console.error("Expected an object but got:", response.data);
+        }
       } catch (error) {
         console.log("The error is: ", error);
       }
     };
   }, []);
 
+  const handleCartNumberChange = (newCartIds) => {
+    setCartIds((prevCartIds) => [...prevCartIds, ...newCartIds]);
+  };
+
   return (
     <div className="cartPage">
       <div className="title">
-        <h3> Your Items </h3>
+        <h3>Your Items</h3>
       </div>
       <div className="content">
+        {cartItem.map((cartitem) => (
+          <div key={cartitem._id}>
+            {cartitem.items.forEach((item) => {
+              productId = item.product;
+            })}
+          </div>
+        ))}
         <div className="cart">
-          <CartItem productId={productId} />
+          <CartItem
+            productId={productId}
+            onCartNumberChange={handleCartNumberChange}
+          />
           <hr />
         </div>
+
         <div className="summary">
-          <div className="summary_text">
-            <h4> Order Summary </h4>
-            <hr />
-            <div className="description">
-              <p> Item Total </p>
-              <p> </p>
-            </div>
-            <div className="description_total">
-              <p> Cart Total </p>
-              <p className="price"> ETB </p>
-            </div>
-          </div>
-          {/* From Uiverse.io by Pawelitto */}
-          <div className="container">
-            <div className="left-side">
-              <div className="card">
-                <div className="card-line"></div>
-                <div className="buttons"></div>
-              </div>
-              <div className="post">
-                <div className="post-line"></div>
-                <div className="screen">
-                  <div className="dollar"> ETB </div>
+          <Link to={`/checkout/${cartIds.join(",")}`}>
+            <div className="container">
+              <div className="left-side">
+                <div className="card">
+                  <div className="card-line"></div>
+                  <div className="buttons"></div>
                 </div>
-                <div className="numbers"></div>
-                <div className="numbers-line2"></div>
+                <div className="post">
+                  <div className="post-line"></div>
+                  <div className="screen">
+                    <div className="dollar"> ETB </div>
+                  </div>
+                  <div className="numbers"></div>
+                  <div className="numbers-line2"></div>
+                </div>
+              </div>
+              <div className="right-side">
+                <div className="new">Checkout</div>
               </div>
             </div>
-            <div className="right-side">
-              <div className="new">Checkout</div>
-            </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

@@ -5,12 +5,16 @@ import "./LoginPage.scss";
 
 const LoginPage = () => {
   const [error, setError] = useState(null);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     password: "",
   });
   const navigate = useNavigate();
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setInputs((values) => ({
@@ -54,6 +58,9 @@ const LoginPage = () => {
           </Link>
         </div>
         <h1>Login Page</h1>
+        <Link to="/register">
+          <span>Don't have an account? Create an Account</span>
+        </Link>
         <form onSubmit={formSubmission}>
           <div className="name">
             <label htmlFor="name">Name:</label>
@@ -66,9 +73,25 @@ const LoginPage = () => {
             />
           </div>
           <div className="password">
-            <label htmlFor="password">Password:</label>
+            <div className="label">
+              <label htmlFor="password">Password:</label>
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                style={{
+                  cursor: "pointer",
+                  background: "none",
+                  border: "none",
+                  color: "#e56d4b",
+                  padding: "0px",
+                  margin: "0px",
+                }}
+              >
+                {passwordVisible ? "Hide" : "Show"}
+              </button>
+            </div>
             <input
-              type="password"
+              type={passwordVisible ? "text" : "password"}
               id="password"
               name="password"
               value={inputs.password}
@@ -76,13 +99,10 @@ const LoginPage = () => {
             />
           </div>
           {error && <span className="error">{error}</span>}
-          <button type="submit">Login</button>
+          <button type="submit"> Login </button>
         </form>
         <Link to="/forgot-password">
-          <span>Forgot Password</span>
-        </Link>
-        <Link to="/register">
-          <span>Don't have an account? Go to Register</span>
+          <span> Forgot Password? </span>
         </Link>
       </div>
     </div>

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./CartItem.scss";
 
-const CartItem = ({ productId }) => {
-  const [cartItem, setCartItem] = useState([]);
-  const [productdetail, setProductdetail] = useState([]);
+const CartItem = ({ productId, onCartNumberChange }) => {
+  const [cartItem, setCartItem] = useState(null); // Initially null
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -12,14 +11,14 @@ const CartItem = ({ productId }) => {
       try {
         const response = await axios.get(
           `http://localhost:5555/api/getproductsId`,
-          {
-            params: { productId },
-          }
+          { params: { productId } }
         );
-        if (Array.isArray(response.data)) {
+        if (response.data && response.data._id) {
+          // Check for object
           setCartItem(response.data);
+          onCartNumberChange([response.data._id]); // Wrap in array
         } else {
-          console.error("Expected an array but got:", response.data);
+          console.error("Expected an object but got:", response.data);
         }
       } catch (error) {
         setError("Unable to fetch cart items");
@@ -28,7 +27,7 @@ const CartItem = ({ productId }) => {
     };
 
     fetchItems();
-  }, [productId]);
+  }, [productId, onCartNumberChange]);
 
   if (error) {
     return <p className="error">{error}</p>;
@@ -36,42 +35,18 @@ const CartItem = ({ productId }) => {
 
   return (
     <div className="cartItems">
-      {cartItem.length === 0 ? (
+      {!cartItem ? (
         <p>Cart is Empty</p>
       ) : (
-        cartItem.map((cartitem) => (
-          <div className="cartitem" key={cartitem._id}>
-            <img src={cartitem.images[0]} alt={cartitem.name} />
-            <div className="detail">
-              <p>{cartitem.name}</p>
-              {productdetail.map((productdetails) => (
-                <div className="choice">
-                  <select name="size" id="size" value={selectedOption}>
-                    onChange={handleChange}
-                    <option value={productdetails.size} disabled>
-                      {productdetails.size}
-                    </option>
-                    <option value="S"> S </option>
-                    <option value="M"> M </option>
-                    <option value="L"> L </option>
-                    <option value="XL"> XL </option>
-                  </select>
-                  <select name="quantity" id="quantity" value={selectedOption}>
-                    onChange={handleChange}
-                    <option value={productdetails.quantity} disabled>
-                      {productdetails.quantity}
-                    </option>
-                    <option value="ascending">Ascending</option>
-                    <option value="descending">Descending</option>
-                  </select>
-                </div>
-              ))}
-            </div>
-            <p className="price">
-              {cartitem.discount ? cartitem.discount : cartitem.price} ETB
-            </p>
+        <div className="cartitem" key={cartItem._id}>
+          <img src={cartItem.images[0]} alt={cartItem.name} />
+          <div className="detail">
+            <p>{cartItem.name}</p>
           </div>
-        ))
+          <p className="price">
+            {cartItem.discount ? cartItem.discount : cartItem.price} ETB
+          </p>
+        </div>
       )}
     </div>
   );

@@ -13,6 +13,16 @@ const RegisterPage = () => {
     confirm_password: "",
   });
   const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -55,6 +65,9 @@ const RegisterPage = () => {
           </Link>
         </div>
         <h1> Register Page </h1>
+        <Link to="/login">
+          <span> Already have an account? Go To Login </span>
+        </Link>
         <form onSubmit={formSubmission}>
           <div className="name">
             <label htmlFor="name"> Name: </label>
@@ -87,9 +100,25 @@ const RegisterPage = () => {
             />
           </div>
           <div className="password">
-            <label htmlFor="password"> Password: </label>
+            <div className="label">
+              <label htmlFor="password"> Password: </label>
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                style={{
+                  cursor: "pointer",
+                  background: "none",
+                  border: "none",
+                  color: "#e56d4b",
+                  padding: "0px",
+                  margin: "0px",
+                }}
+              >
+                {passwordVisible ? "Hide" : "Show"}
+              </button>
+            </div>
             <input
-              type="password"
+              type={passwordVisible ? "text" : "password"}
               id="password"
               name="password"
               value={inputs.password}
@@ -97,9 +126,25 @@ const RegisterPage = () => {
             />
           </div>
           <div className="confirm_password">
-            <label htmlFor="confirm_password"> Confirm Password: </label>
+            <div className="label">
+              <label htmlFor="confirm_password"> Confirm Password: </label>
+              <button
+                type="button"
+                onClick={toggleConfirmPasswordVisibility}
+                style={{
+                  cursor: "pointer",
+                  background: "none",
+                  border: "none",
+                  color: "#e56d4b",
+                  padding: "0px",
+                  margin: "0px",
+                }}
+              >
+                {confirmPasswordVisible ? "Hide" : "Show"}
+              </button>
+            </div>
             <input
-              type="password"
+              type={confirmPasswordVisible ? "text" : "password"}
               id="confirm_password"
               name="confirm_password"
               value={inputs.confirm_password}
@@ -109,9 +154,6 @@ const RegisterPage = () => {
           <span className="error"> {error} </span>
           <button type="submit"> Register </button>
         </form>
-        <Link to="/login">
-          <span> Already have an account? Go To Login </span>
-        </Link>
       </div>
     </div>
   );

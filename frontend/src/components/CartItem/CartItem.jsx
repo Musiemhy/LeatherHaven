@@ -2,49 +2,52 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./CartItem.scss";
 
-const CartItem = ({ productId, onCartNumberChange }) => {
-  const [cartItem, setCartItem] = useState(null); // Initially null
+const CartItem = ({ productId, quantity, size }) => {
+  const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchProduct = async () => {
       try {
         const response = await axios.get(
           `http://localhost:5555/api/getproductsId`,
           { params: { productId } }
         );
+
         if (response.data && response.data._id) {
-          // Check for object
-          setCartItem(response.data);
-          onCartNumberChange([response.data._id]); // Wrap in array
+          setProduct(response.data);
         } else {
           console.error("Expected an object but got:", response.data);
         }
       } catch (error) {
-        setError("Unable to fetch cart items");
-        console.log("Error during fetch items: ", error);
+        setError("Unable to fetch product details");
+        console.log("Error during fetch: ", error);
       }
     };
 
-    fetchItems();
-  }, [productId, onCartNumberChange]);
+    fetchProduct();
+  }, [productId]);
 
   if (error) {
     return <p className="error">{error}</p>;
   }
 
   return (
-    <div className="cartItems">
-      {!cartItem ? (
-        <p>Cart is Empty</p>
+    <div className="cartItem">
+      {!product ? (
+        <p>Loading...</p>
       ) : (
-        <div className="cartitem" key={cartItem._id}>
-          <img src={cartItem.images[0]} alt={cartItem.name} />
+        <div className="cartitem-content">
+          <img src={product.images[0]} alt={product.name} />
           <div className="detail">
-            <p>{cartItem.name}</p>
+            <p>{product.name}</p>
+            <div className="choice">
+              <p>Size: {size}</p>
+              <p>Quantity: {quantity}</p>
+            </div>
           </div>
           <p className="price">
-            {cartItem.discount ? cartItem.discount : cartItem.price} ETB
+            {product.discount ? product.discount : product.price} ETB
           </p>
         </div>
       )}

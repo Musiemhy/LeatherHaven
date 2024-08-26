@@ -6,7 +6,7 @@ import ShippingAdress from "../../components/ShippingAdress/ShippingAdress";
 import Payment from "../../components/Payment/Payment";
 
 const CheckoutPage = () => {
-  const { cartId } = useParams();
+  const { userId } = useParams();
   const [cartItems, setCartItems] = useState([]);
   const [productItems, setProductItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -14,15 +14,17 @@ const CheckoutPage = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
+        console.log(userId);
         const response = await axios.get("http://localhost:5555/api/getcart", {
-          params: { cartId },
+          params: { userId },
         });
 
         if (Array.isArray(response.data)) {
           setCartItems(response.data);
 
-          // Fetch product details based on cart items
-          const productIds = response.data.map((item) => item.product);
+          const productIds = response.data.flatMap((cart) =>
+            cart.items.map((item) => item.product)
+          );
           const response1 = await axios.get(
             "http://localhost:5555/api/getproducts",
             {
@@ -44,19 +46,21 @@ const CheckoutPage = () => {
     };
 
     fetchItems();
-  }, [cartId]);
+  }, [userId]);
 
   useEffect(() => {
-    // Calculate the total price whenever cartItems or productItems change
-    const total = cartItems.reduce((acc, cartItem) => {
-      const productItem = productItems.find(
-        (product) => product._id === cartItem.product
-      );
-      if (productItem) {
-        const price = productItem.discount || productItem.price;
-        return acc + price * cartItem.quantity;
-      }
-      return acc;
+    const total = cartItems.reduce((acc, cart) => {
+      const cartTotal = cart.items.reduce((innerAcc, cartItem) => {
+        const productItem = productItems.find(
+          (product) => product._id === cartItem.product
+        );
+        if (productItem) {
+          const price = productItem.discount || productItem.price;
+          return innerAcc + price * cartItem.quantity;
+        }
+        return innerAcc;
+      }, 0);
+      return acc + cartTotal;
     }, 0);
 
     setTotalPrice(total);
@@ -105,36 +109,38 @@ const CheckoutPage = () => {
               <hr />
             </div>
             <div className="items">
-              {cartItems.map((cartItem) => {
-                const productItem = productItems.find(
-                  (product) => product._id === cartItem.product
-                );
+              {cartItems.map((cart) =>
+                cart.items.map((cartItem) => {
+                  const productItem = productItems.find(
+                    (product) => product._id === cartItem.product
+                  );
 
-                if (!productItem) return null;
+                  if (!productItem) return null;
 
-                return (
-                  <div className="cartitem" key={cartItem._id}>
-                    <img src={productItem.images[0]} alt={productItem.name} />
-                    <div className="detail">
-                      <p>{productItem.name}</p>
-                    </div>
-                    <p className="price">
-                      {productItem.discount
-                        ? productItem.discount
-                        : productItem.price}{" "}
-                      ETB
-                    </p>
-                    <div className="measurments">
-                      <div className="size">
-                        SIZE: <p>{cartItem.size}</p>
+                  return (
+                    <div className="cartitem" key={cartItem._id}>
+                      <img src={productItem.images[0]} alt={productItem.name} />
+                      <div className="detail">
+                        <p>{productItem.name}</p>
                       </div>
-                      <div className="quantity">
-                        QUANTITY: <p>{cartItem.quantity}</p>
+                      <p className="price">
+                        {productItem.discount
+                          ? productItem.discount
+                          : productItem.price}{" "}
+                        ETB
+                      </p>
+                      <div className="measurments">
+                        <div className="size">
+                          SIZE: <p>{cartItem.size}</p>
+                        </div>
+                        <div className="quantity">
+                          QUANTITY: <p>{cartItem.quantity}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
         )}

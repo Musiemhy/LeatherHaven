@@ -5,11 +5,11 @@ import CartItem from "../../components/CartItem/CartItem";
 import axios from "axios";
 
 const CartPage = () => {
+  const [cartItems, setCartItems] = useState([]);
   const [cartIds, setCartIds] = useState([]);
-  const [cartItem, setCartItem] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const userId = localStorage.getItem("user_id");
-
-  let productId = [];
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -17,21 +17,42 @@ const CartPage = () => {
         const response = await axios.get("http://localhost:5555/api/getcart", {
           params: { userId },
         });
+
         if (response.data && response.data._id) {
-          // Check for object
-          setCartItem(response.data);
-          onCartNumberChange([response.data._id]); // Wrap in array
+          setCartItems([response.data]);
+          setCartIds([response.data._id]);
+          calculateTotals([response.data]);
+        } else if (Array.isArray(response.data)) {
+          setCartItems(response.data);
+          const ids = response.data.map((cart) => cart._id);
+          setCartIds(ids);
+          calculateTotals(response.data);
         } else {
-          console.error("Expected an object but got:", response.data);
+          console.error("Unexpected response format:", response.data);
         }
       } catch (error) {
-        console.log("The error is: ", error);
+        console.log("The error is:", error);
       }
     };
-  }, []);
 
-  const handleCartNumberChange = (newCartIds) => {
-    setCartIds((prevCartIds) => [...prevCartIds, ...newCartIds]);
+    fetchCarts();
+  }, [userId]);
+
+  const calculateTotals = (cartItems) => {
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    cartItems.forEach((cartItem) => {
+      cartItem.items.forEach((item) => {
+        totalItems += item.quantity;
+        totalPrice +=
+          item.quantity *
+          (item.product.discount ? item.product.discount : item.product.price);
+      });
+    });
+
+    setTotalItems(totalItems);
+    setTotalPrice(totalPrice);
   };
 
   return (
@@ -40,23 +61,40 @@ const CartPage = () => {
         <h3>Your Items</h3>
       </div>
       <div className="content">
-        {cartItem.map((cartitem) => (
-          <div key={cartitem._id}>
-            {cartitem.items.forEach((item) => {
-              productId = item.product;
-            })}
-          </div>
-        ))}
-        <div className="cart">
-          <CartItem
-            productId={productId}
-            onCartNumberChange={handleCartNumberChange}
-          />
+        <div className="cart_items">
           <hr />
+          {cartItems.length === 0 ? (
+            <p>Cart is Empty!</p>
+          ) : (
+            cartItems.map((cartItem) => (
+              <div key={cartItem._id} className="cart">
+                {cartItem.items.map((item) => (
+                  <CartItem
+                    key={item.product}
+                    productId={item.product}
+                    quantity={item.quantity}
+                    size={item.size}
+                  />
+                ))}
+                <hr />
+              </div>
+            ))
+          )}
         </div>
-
         <div className="summary">
-          <Link to={`/checkout/${cartIds.join(",")}`}>
+          <div className="summary_text">
+            <h4> Order Summary </h4>
+            <hr />
+            <div className="description">
+              <p> Item Total: </p>
+              <p> {totalItems} items </p>
+            </div>
+            <div className="description_total">
+              <p> Cart Total: </p>
+              <p className="price"> {totalPrice} ETB </p>
+            </div>
+          </div>
+          <Link to={`/checkout/${userId}`}>
             <div className="container">
               <div className="left-side">
                 <div className="card">
@@ -66,7 +104,7 @@ const CartPage = () => {
                 <div className="post">
                   <div className="post-line"></div>
                   <div className="screen">
-                    <div className="dollar"> ETB </div>
+                    <div className="dollar">ETB</div>
                   </div>
                   <div className="numbers"></div>
                   <div className="numbers-line2"></div>

@@ -98,7 +98,7 @@ const ProductPage = () => {
             <nav className="breadcrumb">
               <a href="/">Home</a> &gt;{" "}
               <a href="/ProductList">{product.gender}</a> &gt;{" "}
-              <a href="/accessories">Accessories</a> &gt; {product.category}
+              {product.category}
             </nav>
             <div className="mainSection">
               <div className="product-images">

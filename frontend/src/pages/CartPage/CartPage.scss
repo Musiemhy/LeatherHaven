@@ -9,8 +9,17 @@
     gap: 10%;
     margin: 0px 5%;
 
-    .cart {
-      flex-basis: 50%;
+    .cart_items {
+      flex-basis: 60%;
+
+      .cart {
+        display: flex;
+        flex-direction: column;
+
+        hr {
+          margin: 5% 0px;
+        }
+      }
     }
 
     .summary {

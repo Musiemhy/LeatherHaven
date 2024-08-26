@@ -1,0 +1,29 @@
+.cartItem {
+  .cartitem-content {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+
+    img {
+      width: 42%;
+      height: 180px;
+    }
+    .detail {
+      display: flex;
+      flex-direction: column;
+      gap: 3%;
+
+      .choice {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5%;
+      }
+    }
+    .price {
+      font-weight: bolder;
+      font-size: large;
+      margin-left: 15%;
+    }
+  }
+}

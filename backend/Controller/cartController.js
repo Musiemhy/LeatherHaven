@@ -40,7 +40,7 @@ export const getCartById = async (req, res) => {
       return res.status(400).send({ message: "User ID is required" });
     }
 
-    const cart = await Cart.findOne({ user: userId }).populate("items.product");
+    const cart = await Cart.find({ user: userId }).populate("items.product");
 
     if (!cart) {
       return res.status(404).send({ message: "Cart not found" });

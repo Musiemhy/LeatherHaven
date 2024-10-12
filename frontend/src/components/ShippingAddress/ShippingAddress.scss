@@ -1,14 +1,15 @@
-.shippingAdress {
+.shippingAddress {
   display: flex;
   flex-direction: column;
 
   form {
     background-color: #fff6f1;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-    padding: 50px;
+    padding: 70px 50px;
+    margin-bottom: 15px;
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
     gap: 5%;
 
     .items {
@@ -32,22 +33,32 @@
       grid-area: 1/2/2/-1;
     }
     #item3 {
-      grid-area: 2/1/3/2;
+      grid-area: 2/1/3/-1;
     }
     #item4 {
-      grid-area: 2/2/3/-1;
-    }
-    #item5 {
       grid-area: 3/1/4/-1;
     }
-    #item6 {
-      grid-area: 4/1/-1/-1;
+    #item5 {
+      grid-area: 4/1/5/-1;
       display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: space-evenly;
 
       select {
         padding: 12px 40px 10px 10px;
+      }
+    }
+    #item6 {
+      grid-area: 5/1/-1/-1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        padding: 10px 20px;
+        background-image: url(../../assets/btn--background-1.jpg);
+        color: #fff6f1;
       }
     }
   }

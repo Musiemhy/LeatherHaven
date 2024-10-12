@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./CartPage.scss";
 import CartItem from "../../components/CartItem/CartItem";
 import axios from "axios";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [cartIds, setCartIds] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const userId = localStorage.getItem("user_id");
+  const { userId } = useParams();
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -20,13 +19,8 @@ const CartPage = () => {
 
         if (response.data && response.data._id) {
           setCartItems([response.data]);
-          setCartIds([response.data._id]);
-          calculateTotals([response.data]);
         } else if (Array.isArray(response.data)) {
           setCartItems(response.data);
-          const ids = response.data.map((cart) => cart._id);
-          setCartIds(ids);
-          calculateTotals(response.data);
         } else {
           console.error("Unexpected response format:", response.data);
         }
@@ -38,7 +32,11 @@ const CartPage = () => {
     fetchCarts();
   }, [userId]);
 
-  const calculateTotals = (cartItems) => {
+  useEffect(() => {
+    calculateTotals();
+  }, [cartItems]);
+
+  const calculateTotals = () => {
     let totalItems = 0;
     let totalPrice = 0;
 
@@ -53,6 +51,38 @@ const CartPage = () => {
 
     setTotalItems(totalItems);
     setTotalPrice(totalPrice);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await Promise.all(
+        cartItems.map(async (cartItem) => {
+          await Promise.all(
+            cartItem.items.map(async (item) => {
+              await axios.post("http://localhost:5555/api/updatecart", {
+                cartId: cartItem._id,
+                size: item.size,
+                quantity: item.quantity,
+              });
+            })
+          );
+        })
+      );
+      window.location.href = "/checkout";
+    } catch (error) {
+      console.log("Error during checkout: ", error);
+    }
+  };
+
+  const handleItemDelete = (cartId, deletedItemId) => {
+    setCartItems((prevItems) =>
+      prevItems
+        .map((cart) => ({
+          ...cart,
+          items: cart.items.filter((item) => item._id !== deletedItemId),
+        }))
+        .filter((cart) => cart.items.length > 0)
+    );
   };
 
   return (
@@ -70,13 +100,14 @@ const CartPage = () => {
               <div key={cartItem._id} className="cart">
                 {cartItem.items.map((item) => (
                   <CartItem
-                    key={item.product}
+                    key={item._id}
                     productId={item.product}
                     quantity={item.quantity}
                     size={item.size}
+                    cartId={cartItem._id}
+                    onDelete={handleItemDelete}
                   />
                 ))}
-                <hr />
               </div>
             ))
           )}
@@ -94,7 +125,7 @@ const CartPage = () => {
               <p className="price"> {totalPrice} ETB </p>
             </div>
           </div>
-          <Link to={`/checkout/${userId}`}>
+          <Link to={`/checkout/${userId}`} onClick={handleCheckout}>
             <div className="container">
               <div className="left-side">
                 <div className="card">

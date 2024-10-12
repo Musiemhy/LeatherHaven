@@ -39,7 +39,7 @@ export const addUser = async (request, response) => {
 
 export const getUserByNameAndPassword = async (req, res) => {
   try {
-    const { name, password } = req.query;
+    const { name, password } = req.body;
 
     if (!name || !password) {
       return res
@@ -72,15 +72,15 @@ export const getUserByNameAndPassword = async (req, res) => {
   }
 };
 
-export const getUserByName = async (req, res) => {
+export const getUserById = async (req, res) => {
   try {
-    const { name } = req.query;
+    const { userId } = req.query;
 
-    if (!name) {
-      return res.status(400).send({ message: "Name is required" });
+    if (!userId) {
+      return res.status(400).send({ message: "User ID is required" });
     }
 
-    const user = await User.findById(name);
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).send({ message: "User not found" });

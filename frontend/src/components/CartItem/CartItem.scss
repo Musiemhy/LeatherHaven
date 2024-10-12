@@ -18,12 +18,29 @@
         flex-direction: row;
         justify-content: center;
         gap: 5%;
+
+        .choice_items {
+          display: flex;
+          flex-direction: column;
+
+          select {
+            padding: 12px 40px 10px 10px;
+          }
+        }
       }
     }
     .price {
       font-weight: bolder;
       font-size: large;
       margin-left: 15%;
+    }
+    .delete {
+      font-size: larger;
+      cursor: pointer;
+      background: none;
+      border: none;
+      margin-top: 3%;
+      margin-left: 2%;
     }
   }
 }

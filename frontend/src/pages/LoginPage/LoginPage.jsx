@@ -25,15 +25,17 @@ const LoginPage = () => {
 
   const formSubmission = async (event) => {
     event.preventDefault();
-    setError(null); // Reset error before submission
+    setError(null);
 
     try {
-      const response = await axios.get("http://localhost:5555/api/getuser", {
-        params: inputs,
-      });
+      const response = await axios.post(
+        "http://localhost:5555/api/getuser",
+        inputs
+      );
 
       if (response.data) {
         localStorage.setItem("user_id", response.data._id);
+        localStorage.setItem("loggedIn", true);
         alert("Successfully logged in. Redirecting to the homepage.");
         navigate("/");
       } else {

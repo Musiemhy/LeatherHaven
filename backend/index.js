@@ -5,6 +5,7 @@ import cors from "cors";
 import ProductRoutes from "../backend/Routes/ProductRoutes.js";
 import cartRoutes from "../backend/Routes/cartRoutes.js";
 import userRoutes from "../backend/Routes/userRoutes.js";
+import orderRoutes from "../backend/Routes/orderRoutes.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/api", ProductRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", userRoutes);
+app.use("/api", orderRoutes);
 
 app.get(`/`, (request, response) => {
   console.log(request);

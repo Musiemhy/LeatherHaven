@@ -12,9 +12,9 @@ const ProductPage = () => {
   const navigate = useNavigate();
 
   const handleAddToCart = async () => {
-    const user_id = localStorage.getItem("user_id");
+    const userId = localStorage.getItem("user_id");
 
-    if (!user_id) {
+    if (!userId) {
       alert("You must be logged in to add items to the cart.");
       return;
     }
@@ -31,7 +31,7 @@ const ProductPage = () => {
 
     try {
       const cartData = {
-        user: user_id,
+        user: userId,
         items: [
           {
             product: product._id,
@@ -48,9 +48,12 @@ const ProductPage = () => {
         cartData
       );
 
-      if (response.status === 201) {
+      console.log("Response Status:", response.status);
+      console.log("Response Data:", response.data);
+
+      if (response.status === 200) {
         console.log("Product added to cart successfully");
-        navigate(`/cartPage/${productId}`);
+        navigate(`/cartPage/${userId}`);
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);

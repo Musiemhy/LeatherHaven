@@ -8,7 +8,7 @@
     padding: 50px;
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto;
     gap: 5%;
 
     .items {
@@ -35,10 +35,7 @@
       grid-area: 2/1/3/-1;
     }
     #item4 {
-      grid-area: 3/1/4/-1;
-    }
-    #item5 {
-      grid-area: 4/1/-1/-1;
+      grid-area: 3/1/-1/-1;
       display: flex;
       align-items: center;
       justify-content: center;

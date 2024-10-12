@@ -1,70 +1,83 @@
 import React, { useEffect, useState } from "react";
-import "./CheckoutPage.scss";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import ShippingAdress from "../../components/ShippingAdress/ShippingAdress";
+import ShippingAddress from "../../components/ShippingAddress/ShippingAddress";
 import Payment from "../../components/Payment/Payment";
+import "./CheckoutPage.scss";
 
 const CheckoutPage = () => {
-  const { userId } = useParams();
   const [cartItems, setCartItems] = useState([]);
-  const [productItems, setProductItems] = useState([]);
+  const [user, setUser] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchCart = async () => {
       try {
-        console.log(userId);
         const response = await axios.get("http://localhost:5555/api/getcart", {
           params: { userId },
         });
+        console.log("API response: ", response.data);
 
-        if (Array.isArray(response.data)) {
-          setCartItems(response.data);
-
-          const productIds = response.data.flatMap((cart) =>
-            cart.items.map((item) => item.product)
-          );
-          const response1 = await axios.get(
-            "http://localhost:5555/api/getproducts",
-            {
-              params: { productIds },
-            }
-          );
-
-          if (Array.isArray(response1.data)) {
-            setProductItems(response1.data);
-          } else {
-            console.error("Expected an array but got:", response1.data);
-          }
+        if (response.data.length > 0) {
+          setCartItems(response.data[0].items || []);
         } else {
-          console.error("Expected an array but got:", response.data);
+          console.warn("No cart data found.");
+          setCartItems([]);
         }
       } catch (error) {
-        console.log("The error is:", error);
+        console.error("Error fetching cart data:", error);
       }
     };
 
-    fetchItems();
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5555/api/getuserbyid",
+          { params: { userId } }
+        );
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchCart();
+    fetchUser();
   }, [userId]);
 
   useEffect(() => {
-    const total = cartItems.reduce((acc, cart) => {
-      const cartTotal = cart.items.reduce((innerAcc, cartItem) => {
-        const productItem = productItems.find(
-          (product) => product._id === cartItem.product
-        );
-        if (productItem) {
-          const price = productItem.discount || productItem.price;
-          return innerAcc + price * cartItem.quantity;
-        }
-        return innerAcc;
-      }, 0);
-      return acc + cartTotal;
-    }, 0);
+    calculateTotals();
+  }, [cartItems]);
 
-    setTotalPrice(total);
-  }, [cartItems, productItems]);
+  const calculateTotals = () => {
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    cartItems.forEach((item) => {
+      totalItems += item.quantity;
+      totalPrice +=
+        item.quantity * (item.product.discount || item.product.price);
+    });
+
+    setTotalItems(totalItems);
+    setTotalPrice(totalPrice);
+  };
+
+  const handleSave = async (shippingData, paymentData) => {
+    try {
+      await axios.post("http://localhost:5555/api/addorder", {
+        User: userId,
+        items: cartItems,
+        totalPrice: totalPrice,
+        shippingAddress: shippingData,
+        payment: paymentData,
+      });
+      alert("Order added successfully, being redirected to chapa payment.");
+    } catch (error) {
+      console.error("Error saving order:", error);
+    }
+  };
 
   return (
     <div className="checkoutPage">
@@ -74,9 +87,10 @@ const CheckoutPage = () => {
       </div>
       <div className="content">
         <div className="contentitems">
-          <ShippingAdress />
-          <Payment />
+          <ShippingAddress initialData={user} onSave={handleSave} />
+          <Payment initialData={user} onSave={handleSave} />
         </div>
+
         {cartItems.length === 0 ? (
           <div className="orderConfirmationPage">
             <p className="empty">Cart is Empty!</p>
@@ -105,42 +119,30 @@ const CheckoutPage = () => {
               </div>
             </div>
             <div className="heading">
-              <h3>Items({cartItems.length})</h3>
+              <h3>Items ({totalItems})</h3>
               <hr />
             </div>
             <div className="items">
-              {cartItems.map((cart) =>
-                cart.items.map((cartItem) => {
-                  const productItem = productItems.find(
-                    (product) => product._id === cartItem.product
-                  );
-
-                  if (!productItem) return null;
-
-                  return (
-                    <div className="cartitem" key={cartItem._id}>
-                      <img src={productItem.images[0]} alt={productItem.name} />
-                      <div className="detail">
-                        <p>{productItem.name}</p>
-                      </div>
-                      <p className="price">
-                        {productItem.discount
-                          ? productItem.discount
-                          : productItem.price}{" "}
-                        ETB
-                      </p>
-                      <div className="measurments">
-                        <div className="size">
-                          SIZE: <p>{cartItem.size}</p>
-                        </div>
-                        <div className="quantity">
-                          QUANTITY: <p>{cartItem.quantity}</p>
-                        </div>
-                      </div>
+              {cartItems.map((item) => (
+                <div className="cartitem" key={item._id}>
+                  <img src={item.product.images[0]} alt={item.product.name} />
+                  <div className="detail">
+                    <p>{item.product.name}</p>
+                  </div>
+                  <p className="price">
+                    {item.product.discount || item.product.price} ETB
+                  </p>
+                  <div className="measurements">
+                    <div className="size">
+                      SIZE: <p>{item.size}</p>
                     </div>
-                  );
-                })
-              )}
+                    <div className="quantity">
+                      QUANTITY: <p>{item.quantity}</p>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+              ))}
             </div>
           </div>
         )}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.scss";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [error, setError] = useState(null);
@@ -34,16 +35,19 @@ const LoginPage = () => {
       );
 
       if (response.data) {
-        localStorage.setItem("user_id", response.data._id);
-        localStorage.setItem("loggedIn", true);
-        alert("Successfully logged in. Redirecting to the homepage.");
+        sessionStorage.setItem("user_id", response.data._id);
+        sessionStorage.setItem("name", response.data.name);
+        sessionStorage.setItem("loggedIn", true);
+        toast.success("Successfully logged in. Redirecting to the homepage.");
         navigate("/");
       } else {
         setError("Login failed. Please check your credentials.");
+        toast.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.log("The error is: ", error);
       setError("An error occurred during login. Please try again.");
+      toast.error("An error occurred during login. Please try again.");
     }
   };
 

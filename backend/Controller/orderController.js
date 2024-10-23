@@ -18,26 +18,32 @@ export const addOrder = async (req, res) => {
     }
 
     for (const item of items) {
-      if (!item.product || !item.quantity || !item.size) {
+      if (!item.product || !item.quantity) {
         return res.status(400).send({
-          message: "Each item must have a product, size, and quantity",
+          message: "Each item must have a product and quantity",
         });
       }
-
-      const newOrder = { User, items, totalPrice, shippingAddress, payment };
-      const order = await Order.create(newOrder);
-
-      if (!order) {
-        return res.status(402).send({
-          message: "Failed to create an order, Please Try again later.",
+      // Check if size is required based on product category
+      if (item.product.category === "Jacket" && !item.size) {
+        return res.status(400).send({
+          message: "Size is required for jackets",
         });
       }
-
-      return res.status(201).send(order);
     }
+
+    const newOrder = { User, items, totalPrice, shippingAddress, payment };
+    const order = await Order.create(newOrder);
+
+    if (!order) {
+      return res.status(402).send({
+        message: "Failed to create an order, Please Try again later.",
+      });
+    }
+
+    return res.status(201).send(order);
   } catch (error) {
     console.log(error);
-    response.status(500).send({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 };
 

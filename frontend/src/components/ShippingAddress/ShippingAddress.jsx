@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./ShippingAddress.scss";
 
+const regionCityMap = {
+  "Addis Ababa": ["Addis Ababa"],
+  Afar: ["Asayita", "Awash", "Dubti"],
+  Amhara: ["Bahir Dar", "Gondar", "Debre Markos"],
+  "Benishangul-Gumuz": ["Asosa", "Bambasi"],
+  "Dire Dawa": ["Dire Dawa"],
+  Gambela: ["Gambela", "Abobo"],
+  Harari: ["Harar"],
+  Oromia: ["Adama", "Jimma", "Shashamane"],
+  Sidama: ["Hawassa"],
+  Somali: ["Jijiga", "Gode"],
+  SNNPR: ["Hawassa", "Arba Minch"],
+  Tigray: ["Mekelle", "Axum"],
+};
+
 const ShippingAddress = ({ initialData, onSave }) => {
   const [input, setInput] = useState({
     name: initialData?.name || "",
@@ -10,6 +25,7 @@ const ShippingAddress = ({ initialData, onSave }) => {
     region: initialData?.region || "",
     city: initialData?.city || "",
   });
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -29,6 +45,15 @@ const ShippingAddress = ({ initialData, onSave }) => {
     setInput((values) => ({ ...values, [name]: value }));
   };
 
+  const handleRegionChange = (event) => {
+    const { value } = event.target;
+    setInput((values) => ({
+      ...values,
+      region: value,
+      city: "",
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSave) {
@@ -38,7 +63,14 @@ const ShippingAddress = ({ initialData, onSave }) => {
 
   return (
     <div className="shippingAddress">
-      <h3>Shipping Address</h3>
+      <div className="headbar">
+        <h3>Shipping Address</h3>
+        <img
+          src="/asset/icons8-edit.svg"
+          alt="edit"
+          onClick={() => setIsEditable(!isEditable)}
+        />
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="items" id="item1">
           <label htmlFor="name">Name</label>
@@ -48,6 +80,7 @@ const ShippingAddress = ({ initialData, onSave }) => {
             name="name"
             value={input.name}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
             required
           />
         </div>
@@ -59,6 +92,7 @@ const ShippingAddress = ({ initialData, onSave }) => {
             name="phone"
             value={input.phone}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
             required
           />
         </div>
@@ -70,6 +104,7 @@ const ShippingAddress = ({ initialData, onSave }) => {
             name="email"
             value={input.email}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
           />
         </div>
         <div className="items" id="item4">
@@ -80,6 +115,7 @@ const ShippingAddress = ({ initialData, onSave }) => {
             name="address"
             value={input.address}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
             required
           />
         </div>
@@ -89,11 +125,17 @@ const ShippingAddress = ({ initialData, onSave }) => {
               name="region"
               id="state"
               value={input.region}
-              onChange={handleChange}
+              onChange={handleRegionChange}
+              readOnly={!isEditable} // Make input read-only if not editable
             >
               <option value="" disabled>
                 Region
               </option>
+              {Object.keys(regionCityMap).map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
             </select>
           </div>
           <div id="cities">
@@ -102,15 +144,25 @@ const ShippingAddress = ({ initialData, onSave }) => {
               id="city"
               value={input.city}
               onChange={handleChange}
+              disabled={!input.region}
+              readOnly={!isEditable} // Make input read-only if not editable
             >
               <option value="" disabled>
                 City
               </option>
+              {regionCityMap[input.region]?.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
             </select>
           </div>
         </div>
         <div className="items" id="item6">
-          <button type="submit">Confirm Address</button>
+          {isEditable && (
+            <button type="submit">Confirm Shipping Address</button>
+          )}{" "}
+          {/* Show button only if editable */}
         </div>
       </form>
     </div>

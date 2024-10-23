@@ -7,6 +7,7 @@ const Payment = ({ initialData, onSave }) => {
     email: initialData?.email || "",
     phone: initialData?.phone || "",
   });
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -32,7 +33,14 @@ const Payment = ({ initialData, onSave }) => {
 
   return (
     <div className="payment">
-      <h3>Payment</h3>
+      <div className="headbar">
+        <h3>Payment</h3>
+        <img
+          src="/asset/icons8-edit.svg"
+          alt="edit"
+          onClick={() => setIsEditable(!isEditable)}
+        />
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="items" id="item1">
           <label htmlFor="name">Name</label>
@@ -42,6 +50,7 @@ const Payment = ({ initialData, onSave }) => {
             name="name"
             value={input.name}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
             required
           />
         </div>
@@ -53,6 +62,7 @@ const Payment = ({ initialData, onSave }) => {
             name="phone"
             value={input.phone}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
             required
           />
         </div>
@@ -64,10 +74,13 @@ const Payment = ({ initialData, onSave }) => {
             name="email"
             value={input.email}
             onChange={handleChange}
+            readOnly={!isEditable} // Make input read-only if not editable
           />
         </div>
         <div id="item4">
-          <button type="submit">Place Order</button>
+          {isEditable && (
+            <button type="submit">Confirm Payment Information</button>
+          )}{" "}
         </div>
       </form>
     </div>

@@ -2,12 +2,23 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./CartItem.scss";
 
-const CartItem = ({ productId, quantity, size, cartId, onDelete }) => {
+const CartItem = ({
+  productId,
+  quantity,
+  size,
+  cartId,
+  onDelete,
+  onQuantityChange,
+}) => {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedSize, setSelectedSize] = useState(size);
+  const [selectedQuantity, setSelectedQuantity] = useState(quantity);
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `http://localhost:5555/api/getproductsId`,
@@ -23,23 +34,32 @@ const CartItem = ({ productId, quantity, size, cartId, onDelete }) => {
         setError("Unable to fetch product details");
         console.log("Error during fetch: ", error);
       }
+      setLoading(false);
     };
 
     fetchProduct();
   }, [productId]);
 
-  const deleteCart = async () => {
-    try {
-      await axios.delete("http://localhost:5555/api/deletecart", {
-        params: { cartId, itemId: productId },
-      });
-
-      onDelete(cartId, productId); // Notify parent about the deletion
-    } catch (error) {
-      console.error("Error deleting cart item:", error);
-      setError("Unable to delete the cart item");
-    }
+  const handleSizeChange = (e) => {
+    setSelectedSize(e.target.value);
+    onQuantityChange(cartId, productId, selectedQuantity, e.target.value);
   };
+
+  const handleQuantityChange = (e) => {
+    const newQuantity = parseInt(e.target.value, 10);
+    setSelectedQuantity(newQuantity);
+    onQuantityChange(cartId, productId, newQuantity, selectedSize);
+  };
+
+  const calculatePrice = () => {
+    return product.discount
+      ? product.discount * selectedQuantity
+      : product.price * selectedQuantity;
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   if (error) {
     return <p className="error">{error}</p>;
@@ -47,39 +67,45 @@ const CartItem = ({ productId, quantity, size, cartId, onDelete }) => {
 
   return (
     <div className="cartItem">
-      {!product ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="cartitem-content">
+      <div className="cartitem-content">
+        {product.images && product.images.length > 0 && (
           <img src={product.images[0]} alt={product.name} />
-          <div className="detail">
-            <p>{product.name}</p>
-            <div className="choice">
+        )}
+        <div className="detail">
+          <p>{product.name}</p>
+          <div className="choice">
+            {selectedSize && (
               <div className="choice_items">
                 <p>Size: </p>
-                <select name="size" id="size">
-                  <option value={`${size}`}>{size}</option>
+                <select
+                  name="size"
+                  value={selectedSize}
+                  onChange={handleSizeChange}
+                >
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
                 </select>
               </div>
-              <div className="choice_items">
-                <p>Quantity: </p>
-                <select name="" id="">
-                  <option value={`${quantity}`}>{quantity}</option>
-                </select>
-              </div>
+            )}
+
+            <div className="choice_items">
+              <p>Quantity: </p>
+              <select value={selectedQuantity} onChange={handleQuantityChange}>
+                {Array.from({ length: product.stock }, (_, i) => i + 1).map(
+                  (qty) => (
+                    <option key={qty} value={qty}>
+                      {qty}
+                    </option>
+                  )
+                )}
+              </select>
             </div>
           </div>
-          <p className="price">
-            {product.discount
-              ? product.discount * quantity
-              : product.price * quantity}{" "}
-            ETB
-          </p>
-          <span className="delete" onClick={deleteCart}>
-            X
-          </span>
         </div>
-      )}
+        <p className="price">{calculatePrice()} ETB</p>
+      </div>
       <hr />
     </div>
   );

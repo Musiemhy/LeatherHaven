@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./CTA.scss";
 const CTA = () => {
   return (
@@ -8,7 +9,9 @@ const CTA = () => {
         Discover the elegance and durability that only premium leather can
         provide.
       </p>
-      <button> Shop Now </button>
+      <Link to="/ProductList">
+        <button> Shop Now </button>
+      </Link>
     </section>
   );
 };

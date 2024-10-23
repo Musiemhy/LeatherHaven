@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Product.scss";
 
-const Product = ({ category, gender }) => {
+const Product = ({ category, gender, sorting }) => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
 
@@ -11,7 +11,7 @@ const Product = ({ category, gender }) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5555/api/getproducts`,
+          "http://localhost:5555/api/getproducts",
           {
             params: { category, gender },
           }
@@ -30,16 +30,26 @@ const Product = ({ category, gender }) => {
     fetchProducts();
   }, [category, gender]);
 
+  // Apply sorting based on price
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sorting === "ascending") {
+      return a.price - b.price;
+    } else if (sorting === "descending") {
+      return b.price - a.price;
+    }
+    return 0;
+  });
+
   if (error) {
     return <p className="error">{error}</p>;
   }
 
   return (
     <div className="productItem">
-      {products.length === 0 ? (
+      {sortedProducts.length === 0 ? (
         <p>No products available</p>
       ) : (
-        products.map((product) => (
+        sortedProducts.map((product) => (
           <Link to={`/product/${product._id}`} key={product._id}>
             <div className="product">
               <img src={product.images[0]} alt={product.name} />
@@ -47,10 +57,14 @@ const Product = ({ category, gender }) => {
               <p className="name">{product.name}</p>
               <p className="description">{product.description}</p>
               <div className="truePrice">
-                <p className="price">{product.price} ETB</p>
-                <p className="discount">
-                  {product.discount ? product.discount : "No discount"} ETB
-                </p>
+                {product.discount ? (
+                  <>
+                    <p className="price">{product.price} ETB</p>
+                    <p className="discount">{product.discount} ETB</p>
+                  </>
+                ) : (
+                  <p className="discount">{product.price} ETB</p>
+                )}
               </div>
             </div>
           </Link>

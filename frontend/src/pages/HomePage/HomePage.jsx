@@ -5,6 +5,7 @@ import Testimonials from "../../components/Testimonials/Testimonials";
 import CTA from "../../components/CTA/CTA";
 import Features from "../../components/Features/Features";
 import ProductSection from "../../components/ProductSection/ProductSection";
+import Footer from "../../components/Footer/Footer";
 import "./HomePage.scss";
 
 const HomePage = () => {
@@ -16,6 +17,7 @@ const HomePage = () => {
       <Testimonials />
       <CTA />
       <Features />
+      <Footer />
     </div>
   );
 };

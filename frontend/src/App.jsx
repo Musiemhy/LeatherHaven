@@ -9,6 +9,8 @@ import CartPage from "./pages/CartPage/CartPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const location = useLocation();
@@ -19,7 +21,7 @@ const App = () => {
   return (
     <div>
       {!isHomePage && !isRegisterPage && !isLoginPage && <Header />}
-
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -31,7 +33,7 @@ const App = () => {
               <Routes>
                 <Route path="/product/:productId" element={<ProductPage />} />
                 <Route path="/ProductList" element={<ProductListPage />} />
-                <Route path="/cartPage/:userId" element={<CartPage />} />
+                <Route path="/cartPage" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
               </Routes>
             </main>

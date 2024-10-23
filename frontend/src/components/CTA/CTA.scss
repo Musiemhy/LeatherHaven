@@ -5,11 +5,16 @@
   margin: 0px;
   color: #fff6f1;
 
-  Button {
-    padding: 1% 5%;
-    background-image: url(../../assets/btn--background-1.jpg);
-    color: #fff6f1;
-    cursor: pointer;
-    margin-top: 2%;
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    Button {
+      padding: 1% 5%;
+      background-image: url(../../assets/btn--background-1.jpg);
+      color: #fff6f1;
+      cursor: pointer;
+      margin-top: 2%;
+    }
   }
 }

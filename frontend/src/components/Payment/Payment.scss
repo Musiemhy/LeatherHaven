@@ -2,6 +2,22 @@
   display: flex;
   flex-direction: column;
 
+  .headbar {
+    display: flex;
+    justify-content: space-between;
+
+    h3 {
+      margin: auto 0;
+    }
+
+    img {
+      cursor: pointer;
+      width: 20%;
+      max-height: 20%;
+      margin: auto 0;
+    }
+  }
+
   form {
     background-color: #fff6f1;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);

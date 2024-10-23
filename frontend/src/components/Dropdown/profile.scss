@@ -1,0 +1,52 @@
+.card {
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-image: url(../../assets/background.jpg);
+  color: #fff6f1;
+  overflow: hidden;
+
+  .card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .card-item {
+    border-bottom: 1px solid #ddd;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .card-button {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff6f1;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background-color: #e56d4b;
+      color: #fff6f1;
+    }
+
+    .icon {
+      margin-right: 10px;
+      width: 24px;
+      height: 24px;
+      stroke: #fff6f1;
+      fill: none;
+    }
+
+    .icon-path {
+      fill: #fff6f1;
+    }
+  }
+}

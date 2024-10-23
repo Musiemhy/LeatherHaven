@@ -20,7 +20,9 @@ const orderSchema = mongoose.Schema({
       },
       size: {
         type: String,
-        required: true,
+        required: function () {
+          return this.product.category === "Jacket";
+        },
       },
     },
   ],
@@ -35,12 +37,10 @@ const orderSchema = mongoose.Schema({
     },
     email: {
       type: String,
-      unique: true,
     },
     phone: {
       type: Number,
       required: true,
-      unique: true,
     },
     address: {
       type: String,
@@ -62,25 +62,24 @@ const orderSchema = mongoose.Schema({
     },
     email: {
       type: String,
-      unique: true,
     },
     phone: {
       type: Number,
       required: true,
-      unique: true,
     },
-    amount: { type: Number, rquired: true },
-    transactionId: { type: String, required: true },
+    transactionId: {
+      type: String,
+    },
     status: {
       type: String,
-      enum: ["pending", "sucess", "fail"],
-      default: "Pending",
+      enum: ["pending", "success", "fail"],
+      default: "pending",
     },
   },
   orderStatus: {
     type: String,
     enum: ["pending", "confirmed", "shipped", "delivered", "cancelled"],
-    default: "Processing",
+    default: "pending",
   },
   orderDate: {
     type: Date,

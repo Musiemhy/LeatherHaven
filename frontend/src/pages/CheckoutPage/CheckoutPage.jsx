@@ -3,13 +3,16 @@ import axios from "axios";
 import ShippingAddress from "../../components/ShippingAddress/ShippingAddress";
 import Payment from "../../components/Payment/Payment";
 import "./CheckoutPage.scss";
+import { toast } from "react-toastify";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const userId = localStorage.getItem("user_id");
+  const [shippingData, setShippingData] = useState({});
+  const [paymentData, setPaymentData] = useState({});
+  const userId = sessionStorage.getItem("user_id");
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -17,10 +20,9 @@ const CheckoutPage = () => {
         const response = await axios.get("http://localhost:5555/api/getcart", {
           params: { userId },
         });
-        console.log("API response: ", response.data);
 
-        if (response.data.length > 0) {
-          setCartItems(response.data[0].items || []);
+        if (response.data && response.data.items) {
+          setCartItems(response.data.items);
         } else {
           console.warn("No cart data found.");
           setCartItems([]);
@@ -50,6 +52,16 @@ const CheckoutPage = () => {
     calculateTotals();
   }, [cartItems]);
 
+  const handleShippingSave = (data) => {
+    setShippingData(data);
+    toast.success("Shipping address successfully saved.");
+  };
+
+  const handlePaymentSave = (data) => {
+    setPaymentData(data);
+    toast.success("Payment method successfully saved.");
+  };
+
   const calculateTotals = () => {
     let totalItems = 0;
     let totalPrice = 0;
@@ -64,7 +76,7 @@ const CheckoutPage = () => {
     setTotalPrice(totalPrice);
   };
 
-  const handleSave = async (shippingData, paymentData) => {
+  const handleSave = async () => {
     try {
       await axios.post("http://localhost:5555/api/addorder", {
         User: userId,
@@ -73,9 +85,16 @@ const CheckoutPage = () => {
         shippingAddress: shippingData,
         payment: paymentData,
       });
-      alert("Order added successfully, being redirected to chapa payment.");
+      toast.success(
+        "Order added successfully, being redirected to chapa payment."
+      );
+
+      setCartItems([]);
+
+      await axios.post("http://localhost:5555/api/clearcart", { userId });
     } catch (error) {
       console.error("Error saving order:", error);
+      toast.error("Failed to place order. Please try again.");
     }
   };
 
@@ -87,8 +106,8 @@ const CheckoutPage = () => {
       </div>
       <div className="content">
         <div className="contentitems">
-          <ShippingAddress initialData={user} onSave={handleSave} />
-          <Payment initialData={user} onSave={handleSave} />
+          <ShippingAddress initialData={user} onSave={handleShippingSave} />
+          <Payment initialData={user} onSave={handlePaymentSave} />
         </div>
 
         {cartItems.length === 0 ? (
@@ -130,12 +149,16 @@ const CheckoutPage = () => {
                     <p>{item.product.name}</p>
                   </div>
                   <p className="price">
-                    {item.product.discount || item.product.price} ETB
+                    {item.product.discount * item.quantity ||
+                      item.product.price * item.quantity}{" "}
+                    ETB
                   </p>
                   <div className="measurements">
-                    <div className="size">
-                      SIZE: <p>{item.size}</p>
-                    </div>
+                    {item.size && (
+                      <div className="size">
+                        SIZE: <p>{item.size}</p>
+                      </div>
+                    )}
                     <div className="quantity">
                       QUANTITY: <p>{item.quantity}</p>
                     </div>
@@ -147,6 +170,9 @@ const CheckoutPage = () => {
           </div>
         )}
       </div>
+      <button type="submit" className="placeOrder" onClick={handleSave}>
+        Place Order
+      </button>
     </div>
   );
 };

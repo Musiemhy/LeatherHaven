@@ -3,12 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import "./CartPage.scss";
 import CartItem from "../../components/CartItem/CartItem";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const { userId } = useParams();
+  const userId = sessionStorage.getItem("user_id");
+  console.log("userId", userId);
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -37,30 +39,57 @@ const CartPage = () => {
   }, [cartItems]);
 
   const calculateTotals = () => {
-    let totalItems = 0;
-    let totalPrice = 0;
+    let totalItem = 0;
+    let totalPrices = 0;
 
     cartItems.forEach((cartItem) => {
       cartItem.items.forEach((item) => {
-        totalItems += item.quantity;
-        totalPrice +=
-          item.quantity *
-          (item.product.discount ? item.product.discount : item.product.price);
+        const itemQuantity = parseInt(item.quantity, 10);
+        totalItem += itemQuantity;
+        const itemPrice = item.product.discount
+          ? item.product.discount
+          : item.product.price;
+        totalPrices += itemQuantity * itemPrice;
       });
     });
 
-    setTotalItems(totalItems);
-    setTotalPrice(totalPrice);
+    setTotalItems(totalItem);
+    setTotalPrice(totalPrices);
+  };
+
+  const handleItemUpdate = (cartId, productId, newQuantity, newSize) => {
+    setCartItems((prevItems) => {
+      const updatedCarts = prevItems.map((cart) => {
+        if (cart._id === cartId) {
+          return {
+            ...cart,
+            items: cart.items.map((item) => {
+              if (item.product === productId) {
+                return { ...item, quantity: newQuantity, size: newSize };
+              }
+              return item;
+            }),
+          };
+        }
+        return cart;
+      });
+
+      calculateTotals(updatedCarts);
+      return updatedCarts;
+    });
   };
 
   const handleCheckout = async () => {
     try {
+      const currentCartItems = [...cartItems];
+
       await Promise.all(
-        cartItems.map(async (cartItem) => {
+        currentCartItems.map(async (cartItem) => {
           await Promise.all(
             cartItem.items.map(async (item) => {
               await axios.post("http://localhost:5555/api/updatecart", {
                 cartId: cartItem._id,
+                itemId: item._id,
                 size: item.size,
                 quantity: item.quantity,
               });
@@ -74,15 +103,30 @@ const CartPage = () => {
     }
   };
 
-  const handleItemDelete = (cartId, deletedItemId) => {
-    setCartItems((prevItems) =>
-      prevItems
-        .map((cart) => ({
-          ...cart,
-          items: cart.items.filter((item) => item._id !== deletedItemId),
-        }))
-        .filter((cart) => cart.items.length > 0)
-    );
+  const handleItemDelete = async (cartId, deletedItemId) => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:5555/api/deletecart",
+        {
+          params: { cartId: cartId, itemId: deletedItemId },
+        }
+      );
+
+      if (response.status === 200) {
+        setCartItems((prevItems) =>
+          prevItems
+            .map((cart) => ({
+              ...cart,
+              items: cart.items.filter((item) => item._id !== deletedItemId),
+            }))
+            .filter((cart) => cart.items.length > 0)
+        );
+        calculateTotals();
+      }
+    } catch (error) {
+      console.error("Error deleting cart item:", error);
+      toast.error("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -93,20 +137,28 @@ const CartPage = () => {
       <div className="content">
         <div className="cart_items">
           <hr />
-          {cartItems.length === 0 ? (
+          {cartItems.every((cartItem) => cartItem.items.length === 0) ? (
             <p>Cart is Empty!</p>
           ) : (
             cartItems.map((cartItem) => (
               <div key={cartItem._id} className="cart">
                 {cartItem.items.map((item) => (
-                  <CartItem
-                    key={item._id}
-                    productId={item.product}
-                    quantity={item.quantity}
-                    size={item.size}
-                    cartId={cartItem._id}
-                    onDelete={handleItemDelete}
-                  />
+                  <div key={item._id} className="cart-item">
+                    <CartItem
+                      productId={item.product}
+                      quantity={item.quantity}
+                      size={item.size}
+                      cartId={cartItem._id}
+                      itemId={item._id}
+                      onQuantityChange={handleItemUpdate}
+                    />
+                    <span
+                      className="delete"
+                      onClick={() => handleItemDelete(cartItem._id, item._id)}
+                    >
+                      X
+                    </span>
+                  </div>
                 ))}
               </div>
             ))
@@ -125,27 +177,52 @@ const CartPage = () => {
               <p className="price"> {totalPrice} ETB </p>
             </div>
           </div>
-          <Link to={`/checkout/${userId}`} onClick={handleCheckout}>
-            <div className="container">
-              <div className="left-side">
-                <div className="card">
-                  <div className="card-line"></div>
-                  <div className="buttons"></div>
-                </div>
-                <div className="post">
-                  <div className="post-line"></div>
-                  <div className="screen">
-                    <div className="dollar">ETB</div>
+          {cartItems.every((cartItem) => cartItem.items.length === 0) ? (
+            <div onClick={() => toast.error("Cart is empty!")}>
+              {" "}
+              <div className="container">
+                <div className="left-side">
+                  <div className="card">
+                    <div className="card-line"></div>
+                    <div className="buttons"></div>
                   </div>
-                  <div className="numbers"></div>
-                  <div className="numbers-line2"></div>
+                  <div className="post">
+                    <div className="post-line"></div>
+                    <div className="screen">
+                      <div className="dollar">ETB</div>
+                    </div>
+                    <div className="numbers"></div>
+                    <div className="numbers-line2"></div>
+                  </div>
                 </div>
-              </div>
-              <div className="right-side">
-                <div className="new">Checkout</div>
+                <div className="right-side">
+                  <div className="new">Checkout</div>
+                </div>
               </div>
             </div>
-          </Link>
+          ) : (
+            <Link to={`/checkout/${userId}`} onClick={handleCheckout}>
+              <div className="container">
+                <div className="left-side">
+                  <div className="card">
+                    <div className="card-line"></div>
+                    <div className="buttons"></div>
+                  </div>
+                  <div className="post">
+                    <div className="post-line"></div>
+                    <div className="screen">
+                      <div className="dollar">ETB</div>
+                    </div>
+                    <div className="numbers"></div>
+                    <div className="numbers-line2"></div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="new">Checkout</div>
+                </div>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </div>

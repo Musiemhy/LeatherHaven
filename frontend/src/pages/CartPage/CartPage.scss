@@ -1,4 +1,9 @@
 .cartPage {
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
   .title {
     margin: 3% 5%;
   }
@@ -12,12 +17,28 @@
     .cart_items {
       flex-basis: 60%;
 
+      hr {
+        margin: 5% 0px;
+        width: 100%;
+      }
+
       .cart {
         display: flex;
         flex-direction: column;
 
-        hr {
-          margin: 5% 0px;
+        .cart-item {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          .delete {
+            font-size: larger;
+            cursor: pointer;
+            background: none;
+            border: none;
+            margin-top: 3%;
+            margin-left: 2%;
+          }
         }
       }
     }

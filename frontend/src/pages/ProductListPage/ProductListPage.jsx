@@ -5,15 +5,18 @@ import "./ProductListPage.scss";
 const ProductListPage = () => {
   const [selectedGender, setSelectedGender] = useState("ALL");
   const [selectedCategory, setSelectedCategory] = useState("Allproduct");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState(""); // Price sorting option
 
   const handleChange = (event) => {
-    const { value, type } = event.target;
-    setSelectedGender(value);
+    setSelectedGender(event.target.value);
   };
-  const handleChange1 = (event) => {
-    const { value, type } = event.target;
-    setSelectedCategory(value);
+
+  const handleChangeCategory = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const handleSortingChange = (event) => {
+    setSelectedOption(event.target.value); // Get sorting value from event
   };
 
   return (
@@ -30,7 +33,7 @@ const ProductListPage = () => {
                     id={category}
                     value={category}
                     checked={selectedCategory === category}
-                    onChange={handleChange1}
+                    onChange={handleChangeCategory}
                   />
                   <label htmlFor={category}>{category}</label>
                 </li>
@@ -61,7 +64,7 @@ const ProductListPage = () => {
                 name="sorting"
                 id="sorting"
                 value={selectedOption}
-                onChange={handleChange}
+                onChange={handleSortingChange} // Fix sorting handler
               >
                 <option value="" disabled>
                   Price Sorting
@@ -71,7 +74,11 @@ const ProductListPage = () => {
               </select>
             </div>
           </div>
-          <Product category={selectedCategory} gender={selectedGender} />
+          <Product
+            category={selectedCategory}
+            gender={selectedGender}
+            sorting={selectedOption}
+          />
         </div>
       </div>
     </div>

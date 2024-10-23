@@ -1,6 +1,7 @@
 .product-page {
   margin: 10% 5%;
   padding: 20px;
+  font-family: var(--secondary-font);
 
   .breadcrumb {
     margin-bottom: 10px;
@@ -52,6 +53,7 @@
         margin-left: 20px;
         h1 {
           font-size: 24px;
+          font-family: var(--primary-font);
         }
         .reviews {
           margin: 10px 0;
@@ -105,90 +107,95 @@
             }
           }
         }
-      }
-      /* From Uiverse.io by dldrs */
-      .add-to-cart {
-        position: relative;
-        overflow: hidden;
-        outline: none;
-        cursor: pointer;
-        border-radius: 0;
-        border: none;
-        background-color: transparent;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-          rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-        font-family: "Inter", sans-serif;
-        padding: 0;
-        margin-bottom: 20%;
-
-        .default-btn {
-          background-image: linear-gradient(
-            90.1deg,
-            rgba(84, 212, 228, 1) 0.2%,
-            rgba(68, 36, 164, 1) 99.9%
-          );
+        .addcartbtn {
           display: flex;
+          justify-content: center;
           align-items: center;
-          gap: 15px;
-          padding: 1em 3em;
-          border-radius: 0;
-          font-size: 14px;
-          font-weight: 500;
-          text-transform: uppercase;
-          transition: transform 0.3s ease;
-          z-index: 1; // Ensure it stays on top when not hovered
-        }
 
-        .hover-btn {
-          position: absolute;
-          top: 100%; // Move it out of view vertically
-          left: 0;
-          right: 0;
-          font-size: 16px;
-          padding: 1em 3em;
-          text-align: center;
-          background: linear-gradient(
-            63deg,
-            rgba(26, 35, 126, 1) 0%,
-            rgba(69, 39, 160, 1) 100%
-          );
-          box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-            rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-          transition: transform 0.3s ease, top 0.3s ease; // Transition for smooth hover
-          z-index: 0; // Behind the default button
-        }
+          .add-to-cart {
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            cursor: pointer;
+            border-radius: 0;
+            border: none;
+            background-color: transparent;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+              rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+            font-family: "Inter", sans-serif;
+            padding: 0;
+            margin: 10% auto;
 
-        .default-btn span,
-        .hover-btn span {
-          color: hsl(0, 0%, 100%);
-        }
+            .default-btn {
+              background-image: linear-gradient(
+                90.1deg,
+                rgba(84, 212, 228, 1) 0.2%,
+                rgba(68, 36, 164, 1) 99.9%
+              );
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              padding: 1em 3em;
+              border-radius: 0;
+              font-size: 14px;
+              font-weight: 500;
+              text-transform: uppercase;
+              transition: transform 0.3s ease;
+              z-index: 1;
+            }
 
-        &:hover .default-btn {
-          transform: translateY(-100%);
-        }
+            .hover-btn {
+              position: absolute;
+              top: 100%;
+              left: 0;
+              right: 0;
+              font-size: 16px;
+              padding: 1em 3em;
+              text-align: center;
+              background: linear-gradient(
+                63deg,
+                rgba(26, 35, 126, 1) 0%,
+                rgba(69, 39, 160, 1) 100%
+              );
+              box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+                rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+              transition: transform 0.3s ease, top 0.3s ease;
+              z-index: 0;
+            }
 
-        &:hover .hover-btn {
-          top: 0; // Bring it into view
-          transform: translateY(0);
-        }
-      }
+            .default-btn span,
+            .hover-btn span {
+              color: hsl(0, 0%, 100%);
+            }
 
-      .additional-info {
-        display: grid;
-        grid-template-columns: auto auto;
+            &:hover .default-btn {
+              transform: translateY(-100%);
+            }
 
-        span {
-          display: block;
-          margin: 10% 0;
-
-          img {
-            width: 10%;
-            height: 100%;
+            &:hover .hover-btn {
+              top: 0;
+              transform: translateY(0);
+            }
           }
-          p {
-            display: inline;
-            text-align: center;
-            margin-left: 5%;
+        }
+
+        .additional-info {
+          display: grid;
+          grid-template-columns: auto auto;
+
+          span {
+            display: block;
+            margin: 10% 0;
+
+            img {
+              width: 10%;
+              height: 100%;
+            }
+            p {
+              display: inline;
+              text-align: center;
+              margin-left: 5%;
+            }
           }
         }
       }
